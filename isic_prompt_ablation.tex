@@ -1,0 +1,91 @@
+\subsection{ISIC Prompt Ablation}
+
+Using the repository's Med-SA adapter implementation, we trained four prompt
+configurations on the available ISIC 2016 dataset: one positive click, three
+positive clicks, BBox 0.5, and BBox 0.75. All runs used a SAM ViT-B checkpoint,
+1024-pixel inputs, batch size 4, and 40 epochs. Metrics below are from final
+validation at epoch 39.
+
+\begin{table*}[t]
+    \centering
+    \caption{Melanoma segmentation results: replication on ISIC 2016 compared with the Med-SA paper results on ISIC 2019.}
+    \label{tab:melanoma_prompt_comparison}
+    \begin{tabular}{lcccc}
+        \hline
+        & \multicolumn{2}{c}{Replication (ISIC 2016)}
+        & \multicolumn{2}{c}{Med-SA paper (ISIC 2019)} \\
+        Prompt & Dice & IoU & Dice & IoU \\
+        \hline
+        1 point     & 91.7 & 85.6  & 92.6 & 84.1 \\
+        3 points    & 91.7 & 85.53 & 93.4 & 84.7 \\
+        BBox 0.5    & 94.8 & 90.41 & 92.1 & 83.0 \\
+        BBox 0.75   & 95.4 & 91.4  & 93.0 & 84.2 \\
+        \hline
+    \end{tabular}
+\end{table*}
+
+BBox 0.75 performed best in this experiment, exceeding three-click prompting
+by 5.87 IoU points and 3.7 Dice points based on the rounded values in
+Table~\ref{tab:melanoma_prompt_comparison}. The BBox 0.5 result was also higher
+than the three-click result. These findings suggest that, on this dataset and
+under this prompt-generation procedure, box prompts were more effective than
+three positive clicks. They do not establish that boxes are generally superior:
+each configuration was run once, and prompt construction can materially affect
+the comparison.
+
+\paragraph{Prompt protocol.}
+The paper reports four prompt conditions: one positive point, three positive
+points, and bounding boxes with 50\% or 75\% overlap with the target. The
+repository's ISIC path originally generated one random foreground click and
+did not expose these alternatives as command-line settings. The prompt
+ablation therefore required extending prompt generation and routing the
+selected point or box to SAM. In particular, ``BBox 0.5'' and ``BBox 0.75''
+are prompt-generation conditions, not instructions to multiply box coordinates
+by 0.5 or 0.75. Our generated boxes were derived from the ground-truth masks;
+this simulates an annotation-provided prompt and is not an inference of the
+box by the model. Since the paper does not give a fully specified box
+construction algorithm in the released implementation available here, our
+box-generation procedure may not match the authors' exactly. Likewise, our
+three clicks were sampled randomly as positive foreground points; they should
+not be described as reproducing an iterative correction procedure unless each
+later click was selected from the model's preceding segmentation errors.
+
+\paragraph{Dataset and mask availability.}
+The comparison is not an exact reproduction because our runs used ISIC 2016,
+whereas the paper reports melanoma results on ISIC 2019, and we used ViT-B
+rather than the paper's ViT-H setup. The image collection being public does
+not, by itself, provide the pixel-level targets needed to train and score a
+segmentation model. The official ISIC catalogue's 2016 dataset table includes a Task 3B entry with
+900 training images and associated binary masks, as well as 379 test images
+and associated masks~\cite{isicdata}. These are masks for the 2016 release;
+they are not evidence that the pixel-level annotations used for the paper's
+ISIC 2019 experiment are available in the same bundle. The paper and the
+released repository do not identify a specific 2019 segmentation-mask
+release, provide the corresponding image-ID manifest, or specify the exact
+train/test split used to generate the reported melanoma metrics. Therefore,
+the exact ISIC 2019 segmentation results cannot be independently reproduced
+from the paper's dataset name and released code alone: without the matching
+ground-truth masks and split, neither supervised training nor segmentation
+scoring can be reconstructed. This is an artifact and protocol limitation,
+not a claim that no ISIC masks exist for any year. The repository's checked-in
+ISIC loader expects ISBI 2016 Part 1 filenames, so it supports the available
+2016 mask bundle but requires an explicit loader or data-layout change for a
+different release.
+
+\paragraph{Interpretation.}
+The results support a within-experiment comparison of prompt modes on the
+available ISIC 2016 data. They should not be treated as directly comparable
+to the paper's ISIC 2019 numbers because the dataset and backbone differ, the
+box-generation procedure may differ, and the paper's mask release and split
+are not identified in the released artifacts. The study also includes no repeated seeds or
+uncertainty estimates. Accordingly, this is a limited replication: it shows
+that the tested box prompts performed well in this implementation, but it
+does not establish reproduction of the published ISIC 2019 result.
+
+\begin{thebibliography}{1}
+\bibitem{isicdata}
+International Skin Imaging Collaboration,
+\emph{ISIC Challenge Datasets},
+\url{https://challenge.isic-archive.com/data/}.
+Accessed October 8, 2026.
+\end{thebibliography}

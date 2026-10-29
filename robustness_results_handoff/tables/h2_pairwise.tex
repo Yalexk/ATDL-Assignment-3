@@ -1,0 +1,16 @@
+% Requires \usepackage{booktabs}. Matches the report's table style (caption above, Dice in points).
+\begin{table}[t]
+  \caption{H2: paired differences in the drop in Dice between spot placements at SSIM~0.90 (points,
+  threshold~0.5), with 95\% bootstrap intervals and Wilcoxon $p$-values, Holm-corrected over the three comparisons.}
+  \label{tab:h2}
+  \centering\small
+  \begin{tabular}{lcc}
+    \toprule
+    Comparison & Difference [95\% CI] & $p$ (Holm) \\
+    \midrule
+    Boundary $-$ interior   & 2.1 [1.1, 3.2] & $1.2\times10^{-4}$ \\
+    Interior $-$ background & 3.5 [2.7, 4.2] & $7.0\times10^{-14}$ \\
+    Boundary $-$ background & 5.6 [4.7, 6.4] & $2.1\times10^{-27}$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}

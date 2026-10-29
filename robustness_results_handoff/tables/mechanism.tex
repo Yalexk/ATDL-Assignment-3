@@ -1,0 +1,16 @@
+% Requires \usepackage{booktabs}. kappa and phi as defined in latex/report_text.tex (Section 3.5 replacement).
+\begin{table}[t]
+  \caption{Token-level change of the encoder at SSIM~0.90, after the first block and at the encoder output
+  (means over 20 test images). $\kappa$: share of the total change carried by the 1\% most-changed tokens
+  (0.01 for an even map). $\varphi$: share of the change outside the spot footprint.}
+  \label{tab:mechanism}
+  \centering\small
+  \begin{tabular}{lcc}
+    \toprule
+    & Noise & Spots \\
+    \midrule
+    $\kappa$, block 1 $\rightarrow$ output   & 0.013 $\rightarrow$ 0.018 & 0.13 $\rightarrow$ 0.04 \\
+    $\varphi$, block 1 $\rightarrow$ output  & 0.88 $\rightarrow$ 0.88   & 0.12 $\rightarrow$ 0.52 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

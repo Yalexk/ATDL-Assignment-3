@@ -1,0 +1,4 @@
+comparison,difference_points,ci95_lo,ci95_hi,wilcoxon_p_holm
+boundary - interior,2.1,1.1,3.2,1.2e-4
+interior - background,3.5,2.7,4.2,7.0e-14
+boundary - background,5.6,4.7,6.4,2.1e-27

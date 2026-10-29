@@ -1,0 +1,5 @@
+measure,symbol,degradation,block1,encoder_output,note
+share of change in top 1% of tokens,kappa,noise,0.013,0.018,even map = 0.01
+share of change in top 1% of tokens,kappa,spots,0.13,0.04,even map = 0.01
+share of change outside spot footprint,phi,noise,0.88,0.88,approximately flat across blocks
+share of change outside spot footprint,phi,spots,0.12,0.52,rises in steps at global-attention blocks 3/6/9/12 (code indices 2/5/8/11)
